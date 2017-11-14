@@ -13,19 +13,18 @@ import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
 import com.LpanTest.ramType.job.MySchedule3;
-import com.LpanTest.ramType.job.MyScheduleJob;
 
 public class ScheduleTest {
 	
 	public static void main(String[] args) {
 		
-		//创建JobDetail
+		//瀹氫箟JobDetail
 		JobDetail jobDetail = JobBuilder.newJob(MySchedule3.class).withIdentity("shipan", "shipan").build();
 		
 		Date date = new Date();
 		Date cdate = new Date(date.getTime()+3);
 		
-		//创建trigger
+		//瀹氫箟trigger
 		Trigger trigger = TriggerBuilder.newTrigger()
 										.forJob(jobDetail)
 										.startAt(cdate)
@@ -39,7 +38,6 @@ public class ScheduleTest {
 			scheduler.scheduleJob(jobDetail, trigger);
 			scheduler.start();
 		} catch (SchedulerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
