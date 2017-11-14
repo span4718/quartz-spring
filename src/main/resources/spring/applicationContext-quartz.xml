@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+      http://www.springframework.org/schema/task
+      http://www.springframework.org/schema/task/spring-task-4.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-4.0.xsd
+      http://www.springframework.org/schema/tx
+      http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+      http://www.springframework.org/schema/data/mongo
+      http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+      http://www.springframework.org/schema/aop
+      http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+      http://www.springframework.org/schema/util 
+      http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+	default-lazy-init="true">
+	
+	
+	<!-- 以下两种方式  使用一种时 将另外一种注释掉 -->
+       
+<!-- =====================================================RAM 第一种方式  RAM============================================ -->
+		
+	    <!-- 定义job类 -->
+	    <!-- <bean id="mySchedule" class="com.LpanTest.ramType.job.MySchedule2"></bean> -->
+	    
+	    <!-- 定义jobDetail -->
+	    <!--
+	    	
+			此处使用第二种方式	    	
+	  	  	RAM 有两种方式定义JobDetail
+	  	  				  1、任务类	可以实现Job接口或者继承QuartzJobBean  class使用：JobDetailFactoryBean
+	  	  				  2、任务类   由自己定义 不需要实现和继承任何类或接口  class使用: MethodInvokingJobDetailFactoryBean
+	  	  					第二种方式更加灵活
+	    -->
+	    <bean id="schedulejobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+	    	<!-- 第一种方式 -->
+	    	<property name="jobClass" value="com.LpanTest.ramType.job.MySchedule3"/>
+	    	<property name="durability" value="true"></property>
+	    	
+	    	<!-- 第二种方式 -->
+	    	<!-- false  表示一个任务执行完了才能执行下一个任务 -->
+	   <!-- <property name="concurrent" value="false"></property>
+	    	<property name="targetObject">
+	    		<ref bean="mySchedule"/>
+	    	</property>
+	    	<property name="targetMethod">
+	    		<value>execute</value>
+	    	</property> -->
+	    </bean>
+	    
+	    <!-- 
+	    	使用QuartzJobBean，需要继承。而使用MethodInvokeJobDetailFactoryBean则需要指定targetObject（任务实例）和targetMethod（实例中要执行的方法）
+
+		后者优点是无侵入，业务逻辑简单，一目了然，缺点是无法持久化（目前还不太清楚这点!）
+
+		从我使用的经验来说，我更推荐的第二种，其中一个很重要的原因就是因为定时任务中注入相关Service的时候，后者可以直接注入，而前者还需要进行Schedular的替换修改
+	    -->
+	    
+	    
+	    
+	    <!-- 定义trigger -->
+	    <bean id="scheduleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	    	<property name="jobDetail">
+	    		<ref bean="schedulejobDetail"></ref>
+	    	</property>
+	    	<property name="cronExpression">
+	    		<value>0/2 * * * * ?</value>
+	    	</property>
+	    </bean>
+	    
+	    <!-- 配置 触发器 schedule -->
+	    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	    	<property name="triggers">
+	    		<list>
+	    			<ref bean="scheduleTrigger"></ref>
+	    		</list>
+	    	</property>
+	    </bean>
+	   
+	    
+<!-- ================================================JDBC 第二种方式 JDBC=============================================== -->
+	    
+	    
+	    
+	    
+</beans>
