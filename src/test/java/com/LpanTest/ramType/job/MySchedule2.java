@@ -7,8 +7,8 @@ public class MySchedule2 {
 	private Logger logger = Logger.getLogger(MySchedule2.class);
 	
 	public void execute() {
-		logger.info("¹ş¹ş¹ş¹ş¹ş¡£¡£");
+		logger.info("å®šæ—¶ä»»åŠ¡å¼€å§‹äº†ã€‚ã€‚ã€‚");
 		
-		logger.info("ºÇºÇºÇºÇºÇ¡£¡£");
+		logger.info("å®šæ—¶ä»»åŠ¡ç»“æŸäº†ã€‚ã€‚ã€‚");
 	}
 }

@@ -10,8 +10,8 @@ public class MyScheduleJob implements Job{
 	private Logger logger = Logger.getLogger(MyScheduleJob.class);
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		logger.info("¶¨Ê±ÈÎÎñ¿ªÊ¼ÁË¡£¡£¡£");
+		logger.info("å®šæ—¶ä»»åŠ¡å¼€å§‹äº†ã€‚ã€‚ã€‚");
 		
-		logger.info("¶¨Ê±ÈÎÎñ½áÊøÁË¡£¡£¡£");
+		logger.info("å®šæ—¶ä»»åŠ¡ç»“æŸäº†ã€‚ã€‚ã€‚");
 	}
 }

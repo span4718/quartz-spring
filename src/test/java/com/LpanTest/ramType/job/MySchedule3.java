@@ -12,9 +12,9 @@ public class MySchedule3 extends QuartzJobBean {
 	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		
-		logger.info("¶¨Ê±ÈÎÎñ¿ªÊ¼ÁË3¡£¡£¡£");
+		logger.info("å®šæ—¶ä»»åŠ¡3å¼€å§‹äº†ã€‚ã€‚");
 		
-		logger.info("¶¨Ê±ÈÎÎñ½áÊøÁË3¡£¡£¡£");
+		logger.info("å®šæ—¶ä»»åŠ¡3 ç»“æŸäº†ã€‚ã€‚ã€‚");
 
 	}
 
