@@ -21,14 +21,11 @@
       http://www.springframework.org/schema/util 
       http://www.springframework.org/schema/util/spring-util-3.0.xsd"
 	default-lazy-init="true">
-	
-	
-	<!-- 以下两种方式  使用一种时 将另外一种注释掉 -->
        
 <!-- =====================================================RAM 第一种方式  RAM============================================ -->
 		
 	    <!-- 定义job类 -->
-	    <!-- <bean id="mySchedule" class="com.LpanTest.ramType.job.MySchedule2"></bean> -->
+	  <bean id="mySchedule" class="com.LpanTest.ramType.job.MySchedule2"></bean>
 	    
 	    <!-- 定义jobDetail -->
 	    <!--
@@ -43,17 +40,20 @@
 	    	<!-- 第一种方式 -->
 	    	<property name="jobClass" value="com.LpanTest.ramType.job.MySchedule3"/>
 	    	<property name="durability" value="true"></property>
-	    	
+	    </bean>
+	    
+	     <bean id="mySchedulejobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 	    	<!-- 第二种方式 -->
 	    	<!-- false  表示一个任务执行完了才能执行下一个任务 -->
-	   <!-- <property name="concurrent" value="false"></property>
+	   		<property name="concurrent" value="false"></property>
 	    	<property name="targetObject">
 	    		<ref bean="mySchedule"/>
 	    	</property>
 	    	<property name="targetMethod">
 	    		<value>execute</value>
-	    	</property> -->
+	    	</property>
 	    </bean>
+	    
 	    
 	    <!-- 
 	    	使用QuartzJobBean，需要继承。而使用MethodInvokeJobDetailFactoryBean则需要指定targetObject（任务实例）和targetMethod（实例中要执行的方法）
@@ -62,16 +62,22 @@
 
 		从我使用的经验来说，我更推荐的第二种，其中一个很重要的原因就是因为定时任务中注入相关Service的时候，后者可以直接注入，而前者还需要进行Schedular的替换修改
 	    -->
+	    <!-- 定义trigger  cronTrigger-->
+	    <bean id="scheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+	    	<property name="jobDetail" ref="schedulejobDetail"/>
+	    	<!-- 延迟多少时间执行  单位为毫秒 -->
+	    	<property name="startDelay" value="1000" /> 
+	    	<!-- 重复间隔时间 --> 
+        	<property name="repeatInterval" value="2000" />
+	    </bean>
 	    
-	    
-	    
-	    <!-- 定义trigger -->
-	    <bean id="scheduleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	   <!-- 定义trigger simpleTrigger --> 
+	    <bean id="myScheduleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 	    	<property name="jobDetail">
-	    		<ref bean="schedulejobDetail"></ref>
+	    		<ref bean="mySchedulejobDetail"></ref>
 	    	</property>
 	    	<property name="cronExpression">
-	    		<value>0/2 * * * * ?</value>
+	    		<value>0/6 * * * * ?</value>
 	    	</property>
 	    </bean>
 	    
@@ -79,7 +85,8 @@
 	    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 	    	<property name="triggers">
 	    		<list>
-	    			<ref bean="scheduleTrigger"></ref>
+	    			<ref bean="scheduleTrigger"/>
+	    			<ref bean="myScheduleTrigger"/>
 	    		</list>
 	    	</property>
 	    </bean>
