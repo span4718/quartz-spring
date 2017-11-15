@@ -9,6 +9,7 @@
        
        <!-- 开发配置  数据库连接等 -->
        <beans profile="development">
+       		<context:property-placeholder location="classpath:properties/config.properties" ignore-unresolvable="true" />
        		<!-- mysql 数据库连接 -->
        		<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
        			<property name="driverClassName" value="${jdbc.driverClassName}"></property>
@@ -18,15 +19,15 @@
        			
        			<property name="filters" value="stat"/>
 	            <!-- 配置初始化,最大,最小 连接 -->
-	            <property name="initialSize" value="${dbc.initialSize}"/>
-	            <property name="maxActive" value="${dbc.maxActive}"/>
-	            <property name="minIdle" value="${dbc.minIdle}"/>
+	            <property name="initialSize" value="${jdbc.initialSize}"/>
+	            <property name="maxActive" value="${jdbc.maxActive}"/>
+	            <property name="minIdle" value="${jdbc.minIdle}"/>
 	            <!-- 获取链接最大等待超时时间 -->
-	            <property name="maxWait" value="${dbc.maxWait}"/>
+	            <property name="maxWait" value="${jdbc.maxWait}"/>
 	            <!-- 配置间隔多久进行一次检测，检测需要关闭的空闲连接 单位毫秒 -->
-	            <property name="timeBetweenEvictionRunsMillis" value="${dbc.timeBetweenEvictionRunsMillis}"/>
+	            <property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}"/>
 	            <!-- 一个连接在池中的最小生存时间 -->
-	            <property name="minEvictableIdleTimeMillis" value="${dbc.minEvictableIdleTimeMillis}"/>
+	            <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}"/>
 	
 	            <property name="validationQuery" value="SELECT 'x'" />
 	            <property name="testWhileIdle" value="true" />
@@ -38,6 +39,37 @@
        		</bean>
        	
        
+       </beans>
+       
+       <beans profile="test">
+       		<context:property-placeholder location="classpath:properties/test.config.properties" ignore-unresolvable="true" />
+       		
+       		<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+       			<property name="driverClassName" value="${jdbc.driverClassName}"></property>
+       			<property name="url" value="${jdbc.url}"></property>
+       			<property name="username" value="${jdbc.username}"></property>
+       			<property name="password" value="${jdbc.password}"></property>
+       			
+       			<property name="filters" value="stat"/>
+	            <!-- 配置初始化,最大,最小 连接 -->
+	            <property name="initialSize" value="${jdbc.initialSize}"/>
+	            <property name="maxActive" value="${jdbc.maxActive}"/>
+	            <property name="minIdle" value="${jdbc.minIdle}"/>
+	            <!-- 获取链接最大等待超时时间 -->
+	            <property name="maxWait" value="${jdbc.maxWait}"/>
+	            <!-- 配置间隔多久进行一次检测，检测需要关闭的空闲连接 单位毫秒 -->
+	            <property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}"/>
+	            <!-- 一个连接在池中的最小生存时间 -->
+	            <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}"/>
+	
+	            <property name="validationQuery" value="SELECT 'x'" />
+	            <property name="testWhileIdle" value="true" />
+	            <property name="testOnBorrow" value="false" />
+	            <property name="testOnReturn" value="false" />
+	
+	            <property name="poolPreparedStatements" value="true" />
+	            <property name="maxPoolPreparedStatementPerConnectionSize" value="50" />
+       		</bean>
        </beans>
        
        
