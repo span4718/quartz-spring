@@ -37,8 +37,6 @@
 	            <property name="poolPreparedStatements" value="true" />
 	            <property name="maxPoolPreparedStatementPerConnectionSize" value="50" />
        		</bean>
-       	
-       
        </beans>
        
        <beans profile="test">

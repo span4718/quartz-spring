@@ -23,7 +23,6 @@ public class ScheduleJDBCTest {
 		ApplicationContext ac = new ClassPathXmlApplicationContext("spring/applicationContext-quartz-test.xml");
 		scheduler = ac.getBean(Scheduler.class);
 		startSchedule();
-		//remove("shipan","shipan","liupp","liupp");
 	}
 
 	public static void startSchedule() {
@@ -46,7 +45,6 @@ public class ScheduleJDBCTest {
 			} catch (SchedulerException e) {
 				e.printStackTrace();
 			}
-		
 	}
 
 }
