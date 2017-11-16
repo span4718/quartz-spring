@@ -142,13 +142,6 @@
     <version>2.9.1</version>
 </dependency>
 
-    <!--  jstl 标签库 --> 
-    <dependency>
-      <groupId>javax.servlet.jsp.jstl</groupId>
-      <artifactId>jstl</artifactId>
-      <version>1.2</version>
-    </dependency>
-    
      <dependency>
       <groupId>org.quartz-scheduler</groupId>
       <artifactId>quartz</artifactId>
