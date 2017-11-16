@@ -9,7 +9,28 @@
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-       
+     
+     
+     <!-- 防止responseBody 中 中文乱码 -->
+     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean
+                    class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <bean class="org.springframework.http.MediaType">
+                                <constructor-arg index="0" value="text" />
+                                <constructor-arg index="1" value="plain" />
+                                <constructor-arg index="2" value="UTF-8" />
+                            </bean>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+     
     <context:component-scan base-package="com.Lpan" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
@@ -21,6 +42,7 @@
         <property name="suffix" value=".jsp" />
         <property name="order" value="2"/>
     </bean>
+    
     
 </beans>
 
