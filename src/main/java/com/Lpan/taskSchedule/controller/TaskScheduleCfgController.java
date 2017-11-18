@@ -21,7 +21,7 @@ public class TaskScheduleCfgController {
 	
 	private Logger logger = Logger.getLogger(TaskScheduleCfgController.class);
 	
-	@Autowired
+	@Autowired 
 	private TaskScheduleCfgService taskScheduleCfgService;
 	
 	@RequestMapping("/showList")
