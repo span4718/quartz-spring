@@ -13,6 +13,7 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
@@ -22,19 +23,24 @@ import com.alibaba.fastjson.JSON;
 
 
 @Component
-public class QuartzScheduleManager {
+public class QuartzScheduleManager implements InitializingBean{
 	
 	private Logger logger = Logger.getLogger(QuartzScheduleManager.class);
 	
-	@Autowired
-	private SchedulerFactoryBean schedulerFactoryBean;
+//	@Autowired
+//	private MethodInvokingJobDetailFactoryBean methodInvokingJobDetailFactoryBean;
 	
 	private String JOB_PREFIX = "LPAN_JOB_";
 	private String JOB_GROUP_NAME = "JOB_LPAN";
 	private String TRIGGER_PREFIX = "LPAN_TRIGGER_";
 	private String TRIGGER_GROUP_NAME = "TRIGGER_LPAN";
 	
+	private boolean clearJob = false;
+
 	private Scheduler scheduler;
+	
+	@Autowired
+	private SchedulerFactoryBean schedulerFactoryBean;
 	
 	/**
 	 * 添加一个定时任务  使用默认的 任务组名，触发器名，触发器组名
@@ -46,16 +52,21 @@ public class QuartzScheduleManager {
 		/**
 		 * 根据jobCode 判断job当前状态时否开启
 		 */
+		String string = getJobRunneringStatus(taskScheduleCfg.getJobCode());
 		if(null != scheduler && TaskScheduleConstant.JOB_RUNNERING_STATUS_OFF.equals(getJobRunneringStatus(taskScheduleCfg.getJobCode()))) {
 				JobDataMap jobDataMap = new JobDataMap();
 				jobDataMap.put(TaskScheduleConstant.SCHEDULER_JOB_KEY, JSON.toJSONString(taskScheduleCfg));
 				try {
+					//methodInvokingJobDetailFactoryBean.setTargetObject(taskScheduleCfg.getJobClass());
+					//methodInvokingJobDetailFactoryBean.setTargetMethod(taskScheduleCfg.getJobClassMethodName());
+					
 					//根据类名获取类再强转未Job类型  创建jobDetail
 					JobBuilder jobBuilderl = JobBuilder.newJob((Class<Job>)Class.forName(jobClass));
 					//JobDetail
 					JobDetail jobDetail = jobBuilderl.withIdentity(JOB_PREFIX+taskScheduleCfg.getJobCode(), JOB_GROUP_NAME)
-									.usingJobData(jobDataMap)
-									.build();
+													 .usingJobData(jobDataMap)
+													 .build();
+					
 					//Trigger
 					TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger();
 					Trigger	trigger = triggerBuilder.withIdentity(TRIGGER_PREFIX+taskScheduleCfg.getJobCode(),TRIGGER_GROUP_NAME)
@@ -63,7 +74,7 @@ public class QuartzScheduleManager {
 										.build();
 					scheduler.scheduleJob(jobDetail, trigger);
 					//开启定时任务
-					if(scheduler.isShutdown()) {
+					if(!scheduler.isShutdown()) {
 						scheduler.start();
 					}
 				} catch (ClassNotFoundException e) {
@@ -152,6 +163,7 @@ public class QuartzScheduleManager {
 	 */
 	public String getJobRunneringStatus(String jobCode) {
 		try {
+			JobKey jobKey = JobKey.jobKey(JOB_PREFIX+jobCode, JOB_GROUP_NAME);
 			JobDetail jobDetail = scheduler.getJobDetail(JobKey.jobKey(JOB_PREFIX+jobCode, JOB_GROUP_NAME));
 			Trigger trigger = scheduler.getTrigger(TriggerKey.triggerKey(TRIGGER_PREFIX+jobCode,TRIGGER_GROUP_NAME));
 			if(null != jobDetail && trigger == null) {
@@ -192,14 +204,67 @@ public class QuartzScheduleManager {
 	 */
 	public void removeJob(TaskScheduleCfg taskSchedule) {
 		try {
-			scheduler.pauseJob(JobKey.jobKey(JOB_PREFIX+taskSchedule.getJobCode(), JOB_GROUP_NAME));
-			scheduler.unscheduleJob(TriggerKey.triggerKey(JOB_PREFIX+taskSchedule.getJobCode(), TRIGGER_GROUP_NAME));
-			scheduler.deleteJob(JobKey.jobKey(JOB_PREFIX+taskSchedule.getJobCode(), TRIGGER_GROUP_NAME));
+			//停止触发器
+			scheduler.pauseJob(JobKey.jobKey(TRIGGER_PREFIX+taskSchedule.getJobCode(), TRIGGER_GROUP_NAME));
+			//移除触发器
+			scheduler.unscheduleJob(TriggerKey.triggerKey(TRIGGER_PREFIX+taskSchedule.getJobCode(), TRIGGER_GROUP_NAME));
+			//移除定时任务
+			scheduler.deleteJob(JobKey.jobKey(JOB_PREFIX+taskSchedule.getJobCode(), JOB_GROUP_NAME));
 		} catch (SchedulerException e) {
 			logger.info("删除定时任务失败");
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		initScedule(clearJob);
 		
+	}
+	
+	/**
+	 * 初始化scheduler
+	 * @param clearJob
+	 */
+	private void initScedule(boolean clearJob) {
+		logger.info("初始化scheduler");
+		scheduler = schedulerFactoryBean.getScheduler();
+		logger.info("created schedule");
+		
+		if(clearJob) {
+			logger.warn("删除已存在的job/trigger");
+			clearSchedule();
+		}
+		
+		try {
+			scheduler.start();
+		} catch (SchedulerException e) {
+			logger.info("启动定时任务异常");
+			e.printStackTrace();
+		}
+	}
+
+	private void clearSchedule() {
+		try {
+			scheduler.clear();
+		} catch (SchedulerException e) {
+			logger.info("清除scheduler 异常");
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 移除所有定时任务
+	 */
+	public void removeAllTask() {
+		try {
+			if(!scheduler.isShutdown()) {
+				scheduler.shutdown();
+			}
+		} catch (SchedulerException e) {
+			logger.info("关闭定时任务异常");
+			e.printStackTrace();
+		}
 	}
 	
 }

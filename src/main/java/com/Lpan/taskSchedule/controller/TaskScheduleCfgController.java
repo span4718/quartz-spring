@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.Lpan.taskSchedule.model.TaskScheduleCfg;
 import com.Lpan.taskSchedule.service.TaskScheduleCfgService;
+import com.Lpan.taskSchedule.service.TaskSchedulerTransfer;
 
 @Controller
 @RequestMapping("/taskScheduleCfg")
@@ -23,6 +24,8 @@ public class TaskScheduleCfgController {
 	
 	@Autowired
 	private TaskScheduleCfgService taskScheduleCfgService;
+	@Autowired
+	private TaskSchedulerTransfer taskSchedulerTransfer;
 	
 	@RequestMapping("/showList")
 	public String showTaskList(HttpServletRequest request,HttpServletResponse response) {
@@ -37,18 +40,18 @@ public class TaskScheduleCfgController {
 		String  jobId = request.getParameter("jobId");
 		TaskScheduleCfg scheduleCfg = new TaskScheduleCfg();
 		if(jobId != null && !"".equals(jobId)) {
-			scheduleCfg = taskScheduleCfgService.selecTask(jobId);
+			scheduleCfg = taskScheduleCfgService.selecTaskById(jobId);
 		}
 		request.setAttribute("task", scheduleCfg);
 		return "/taskSchedule/addtask";
 	}
 	
 	@RequestMapping("/addTask") 
-	public String addTask(HttpServletRequest request,TaskScheduleCfg taskScheduleCfg) {
+	public void addTask(HttpServletRequest request,TaskScheduleCfg taskScheduleCfg) {
 		logger.info("添加定时任务配置："+taskScheduleCfg.toString());
 		taskScheduleCfg.setJobId(UUID.randomUUID().toString());
+		//添加一个定时任务
 		taskScheduleCfgService.addTask(taskScheduleCfg);
-		return "";
 	}
 	
 	/**
@@ -71,7 +74,35 @@ public class TaskScheduleCfgController {
 	 */ 
 	@RequestMapping("/startTask/{jobId}")
 	public void startTask(HttpServletRequest request,@PathVariable("jobId") String jobId) {
-		System.out.println(jobId);
+		//根据jobId查询task实例
+		TaskScheduleCfg taskScheduleCfg = taskScheduleCfgService.selecTaskById(jobId);
+		
+		taskSchedulerTransfer.addTask(taskScheduleCfg);
 	}
+	
+	/**
+	 * 停止一个定时任务
+	 * @param request
+	 * @param jobId
+	 */
+	@RequestMapping("/stopTask/{jobId}")
+	public void stopTask(HttpServletRequest request,@PathVariable("jobId") String jobId) {
+		//根据jobId查询task实例
+		TaskScheduleCfg taskScheduleCfg = taskScheduleCfgService.selecTaskById(jobId);
+		
+		taskSchedulerTransfer.removeTask(taskScheduleCfg);
+	}
+	
+	/**
+	 * 停止所有定时任务
+	 * @param request
+	 */
+	@RequestMapping("/stopAllTsk")
+	public void stopAllTask(HttpServletRequest request) {
+		
+		taskSchedulerTransfer.reomveAllTask();
+		
+	}
+	
 
 }

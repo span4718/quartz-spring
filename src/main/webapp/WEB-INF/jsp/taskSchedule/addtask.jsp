@@ -36,6 +36,14 @@
 	             </div>
 	           </div>
 	           <div class="form-group">
+	             <label class="col-sm-2 control-label">执行定时任务类的方法名: &nbsp;&nbsp;<span style="color:#FF0000;font-weight: bold;vertical-align: middle;">*</span>	  </label>
+	             <div class="col-sm-4">
+	              <div class="qwe">
+	             	 <input type="text" name="jobClassMethodName" class="form-control"  value="${task.jobClassMethodName}"><span></span>
+	              </div>
+	             </div>
+	           </div>
+	           <div class="form-group">
 	             <label class="col-sm-2 control-label">定时表达方式: &nbsp;&nbsp;<span style="color:#FF0000;font-weight: bold;vertical-align: middle;">*</span>	  </label>
 	             <div class="col-sm-4">
 	             	<div class="qwe">

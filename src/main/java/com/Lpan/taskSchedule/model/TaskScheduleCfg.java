@@ -9,6 +9,8 @@ public class TaskScheduleCfg {
     private String jobName;
 
     private String jobCode;
+    
+    private String jobClassMethodName;
 
     private String autoStartup;
 
@@ -57,8 +59,16 @@ public class TaskScheduleCfg {
     public void setJobCode(String jobCode) {
         this.jobCode = jobCode == null ? null : jobCode.trim();
     }
+    
+    public String getJobClassMethodName() {
+		return jobClassMethodName;
+	}
 
-    public String getAutoStartup() {
+	public void setJobClassMethodName(String jobClassMethodName) {
+		this.jobClassMethodName = jobClassMethodName;
+	}
+
+	public String getAutoStartup() {
         return autoStartup;
     }
 

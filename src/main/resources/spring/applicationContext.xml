@@ -36,7 +36,6 @@
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
 	</bean>
 	
-	
 	<!-- 任务调度 -->
 	<import resource="classpath*:spring/applicationContext-quartz.xml"/>
 	<import resource="classpath*:spring/applicationContext-servlet.xml"/>

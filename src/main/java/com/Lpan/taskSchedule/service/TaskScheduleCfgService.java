@@ -29,7 +29,7 @@ public class TaskScheduleCfgService {
 		taskScheduleCfgMapper.updateByPrimaryKey(taskSchdeuleCfg);
 	}
 	
-	public TaskScheduleCfg selecTask(String jobId) {
+	public TaskScheduleCfg selecTaskById(String jobId) {
 		return taskScheduleCfgMapper.selectByPrimaryKey(jobId);
 	}
 	

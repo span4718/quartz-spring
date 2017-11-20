@@ -9,7 +9,6 @@
 
 <script type="text/javascript">
 
-	
 </script>
 </head>
 <body>
@@ -17,6 +16,7 @@
 	<div>
 		<td class="">
 			<button type="button" name="addTask" onclick="window.location.href='${pageContext.request.contextPath}/taskScheduleCfg/toaddtask'">添加</button>
+			<button type="button" name="addTask" onclick="window.location.href='${pageContext.request.contextPath}/taskScheduleCfg/stopAllTsk'">全部停止</button>
 		</td>
 	</div>
 	<div>
@@ -47,6 +47,8 @@
 		                         <td>${Task.status}</td>
 		                         <td>${Task.deleteFlag}</td>
 		                         <td id="${Task.jobId}">
+		                         		<button type="button" name="start" onclick="window.location.href='${pageContext.request.contextPath}/taskScheduleCfg/startTask/${Task.jobId}'">启动</button>
+		                         		<button type="button" name="stop" onclick="window.location.href='${pageContext.request.contextPath}/taskScheduleCfg/stopTask/${Task.jobId}'" class="btn btn-primary btn-sm" >停止</button>
 		                         	    <button type="button" name="update"class="btn btn-primary btn-sm">修改</button>
 		                         		<button type="button" name="bankLimit" class="btn btn-primary btn-sm" >执行一次</button>
 		                         		<c:if test="${Task.status == 1}">
