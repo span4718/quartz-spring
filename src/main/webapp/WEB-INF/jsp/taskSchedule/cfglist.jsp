@@ -16,7 +16,6 @@
 	<div>
 		<td class="">
 			<button type="button" name="addTask" onclick="window.location.href='${pageContext.request.contextPath}/taskScheduleCfg/toaddtask'">添加</button>
-			<button type="button" name="addTask" onclick="window.location.href='${pageContext.request.contextPath}/taskScheduleCfg/stopAllTsk'">全部停止</button>
 		</td>
 	</div>
 	<div>

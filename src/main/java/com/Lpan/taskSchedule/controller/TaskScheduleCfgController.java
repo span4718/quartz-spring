@@ -97,7 +97,7 @@ public class TaskScheduleCfgController {
 	 * 停止所有定时任务
 	 * @param request
 	 */
-	@RequestMapping("/stopAllTsk")
+	@RequestMapping("/stopAllTask")
 	public void stopAllTask(HttpServletRequest request) {
 		
 		taskSchedulerTransfer.reomveAllTask();
