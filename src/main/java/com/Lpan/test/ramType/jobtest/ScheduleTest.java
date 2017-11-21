@@ -41,8 +41,6 @@ public class ScheduleTest {
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
-		
-		
 	}
 
 }

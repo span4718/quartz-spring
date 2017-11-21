@@ -52,15 +52,11 @@ public class QuartzScheduleManager implements InitializingBean{
 		/**
 		 * 根据jobCode 判断job当前状态时否开启
 		 */
-		String string = getJobRunneringStatus(taskScheduleCfg.getJobCode());
 		if(null != scheduler && TaskScheduleConstant.JOB_RUNNERING_STATUS_OFF.equals(getJobRunneringStatus(taskScheduleCfg.getJobCode()))) {
 				JobDataMap jobDataMap = new JobDataMap();
 				jobDataMap.put(TaskScheduleConstant.SCHEDULER_JOB_KEY, JSON.toJSONString(taskScheduleCfg));
 				try {
-					//methodInvokingJobDetailFactoryBean.setTargetObject(taskScheduleCfg.getJobClass());
-					//methodInvokingJobDetailFactoryBean.setTargetMethod(taskScheduleCfg.getJobClassMethodName());
-					
-					//根据类名获取类再强转未Job类型  创建jobDetail
+					//根据类名获取类再强转为Job类型  创建jobDetail
 					JobBuilder jobBuilderl = JobBuilder.newJob((Class<Job>)Class.forName(jobClass));
 					//JobDetail
 					JobDetail jobDetail = jobBuilderl.withIdentity(JOB_PREFIX+taskScheduleCfg.getJobCode(), JOB_GROUP_NAME)
@@ -163,7 +159,6 @@ public class QuartzScheduleManager implements InitializingBean{
 	 */
 	public String getJobRunneringStatus(String jobCode) {
 		try {
-			JobKey jobKey = JobKey.jobKey(JOB_PREFIX+jobCode, JOB_GROUP_NAME);
 			JobDetail jobDetail = scheduler.getJobDetail(JobKey.jobKey(JOB_PREFIX+jobCode, JOB_GROUP_NAME));
 			Trigger trigger = scheduler.getTrigger(TriggerKey.triggerKey(TRIGGER_PREFIX+jobCode,TRIGGER_GROUP_NAME));
 			if(null != jobDetail && trigger == null) {
