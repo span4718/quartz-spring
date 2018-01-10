@@ -10,5 +10,8 @@
     	<typeAliases>
     		<typeAlias type="com.Lpan.taskSchedule.model.TaskScheduleCfg" alias="TaskScheduleCfg"/>
     		<typeAlias type="com.Lpan.taskSchedule.model.TaskScheduleResult" alias="TaskScheduleResult"/>
+    		<typeAlias type="com.Lpan.system.model.User" alias="user"/>
+    		<typeAlias type="com.Lpan.system.model.Resource" alias="resource"/>
+    		<typeAlias type="com.Lpan.system.model.Role" alias="role"/>
     	</typeAliases>
 </configuration>

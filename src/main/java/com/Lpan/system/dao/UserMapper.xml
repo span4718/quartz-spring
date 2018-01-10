@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Lpan.system.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.Lpan.system.model.User">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="Email" jdbcType="VARCHAR" property="email" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="is_delete" jdbcType="VARCHAR" property="isDelete" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from explame_user_manager
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="user">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into explame_user_manager (user_name, name, age, 
+      sex, password, salt, phone, 
+      Email, status, is_delete, 
+      type, create_time, update_time, 
+      memo)
+    values (#{userName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
+      #{sex,jdbcType=CHAR}, #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{isDelete,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{memo,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="user">
+    update explame_user_manager
+    set user_name = #{userName,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      sex = #{sex,jdbcType=CHAR},
+      password = #{password,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      Email = #{email,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      memo = #{memo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, user_name, name, age, sex, password, salt, phone, Email, status, is_delete, 
+    type, create_time, update_time, memo
+    from explame_user_manager
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, user_name, name, age, sex, password, salt, phone, Email, status, is_delete, 
+    type, create_time, update_time, memo
+    from explame_user_manager
+  </select>
+  
+  
+  <!-- ==================================================================================================================== -->
+  <!-- 设置角色  -->
+  <insert id="setRoleForUser" parameterType="java.util.Map">
+  	insert into explame_user_role (
+	<trim suffixOverrides=",">
+		<if test="userId != null and userId !=''">
+			user_id = #{userId},
+		</if>
+		<if test="roleId != null and roleId !=''">
+			role_id = #{roleId},
+		</if>
+		create_time,
+	</trim>
+  	) VALUES 
+  	(
+  	<trim suffixOverrides=",">
+		<if test="userId != null and userId !=''">
+			#{userId},
+		</if>
+		<if test="roleId != null and roleId !=''">
+			#{roleId},
+		</if>
+		now(),
+  	</trim>
+  	)
+  </insert>
+  
+  <delete id="deleteRoleForUser" parameterType="role">
+  	DELETE FROM explame_user_role WHERE role_id = #{roleId} AND user_id = #{userId}
+  </delete>
+  
+</mapper>
