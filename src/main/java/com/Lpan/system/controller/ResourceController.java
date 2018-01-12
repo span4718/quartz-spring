@@ -1,5 +1,7 @@
 package com.Lpan.system.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,14 @@ public class ResourceController {
 	@ResponseBody
 	public String updateResource(HttpServletRequest request,@RequestBody Resource resource) {
 		int key = resourceService.updateByPrimaryKey(resource);		
+		return "Success";
+	}
+	
+	@RequestMapping("/setResourceForRole")
+	@ResponseBody
+	public String setResourceForRole(HttpServletRequest request,@RequestBody Map<String,Object> resourcemap) {
+		int key = resourceService.setResourceForRole(resourcemap);
+		
 		return "Success";
 	}
 

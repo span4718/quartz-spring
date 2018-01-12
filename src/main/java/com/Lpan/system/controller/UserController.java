@@ -1,5 +1,7 @@
 package com.Lpan.system.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +40,8 @@ public class UserController {
 	
 	@RequestMapping("/setRoleForUser")
 	@ResponseBody
-	public String addRoleToUser(HttpServletRequest request,@RequestBody Role role){
-		int key = roleService.updateByPrimaryKey(role);
+	public String addRoleToUser(HttpServletRequest request,@RequestBody Map<String,Object> rolemap){
+		int key = roleService.setRoleForUser(rolemap);
 		return "Success";
 	}
 	

@@ -1,6 +1,7 @@
 package com.Lpan.system.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,9 @@ public class RoleService {
 
     public int updateByPrimaryKey(Role record) {
     	return roleMapper.updateByPrimaryKey(record);
+    }
+    
+    public int setRoleForUser(Map<String,Object> rolemap) {
+    	return roleMapper.setRoleForUser(rolemap);
     }
 }

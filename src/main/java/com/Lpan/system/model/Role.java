@@ -6,7 +6,8 @@ public class Role {
    private Integer id;
 
    private String roleName;
-   private Integer status;
+   
+   private Integer status; 
 
    private Date createTime;
 

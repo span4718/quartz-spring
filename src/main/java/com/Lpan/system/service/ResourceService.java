@@ -1,6 +1,7 @@
 package com.Lpan.system.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,10 @@ public class ResourceService {
     public int updateByPrimaryKey(Resource record) {
     	return resourceMapper.updateByPrimaryKey(record);
     }
+
+
+	public int setResourceForRole(Map<String, Object> resourcemap) {
+		return resourceMapper.setResourceMapper(resourcemap);
+	}
 
 }

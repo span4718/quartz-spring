@@ -1,6 +1,7 @@
 package com.Lpan.system.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.Lpan.system.model.Resource;
 
@@ -20,4 +21,7 @@ public interface ResourceMapper {
 
     
     int updateByPrimaryKey(Resource record);
+
+
+	int setResourceMapper(Map<String, Object> resourcemap);
 }
